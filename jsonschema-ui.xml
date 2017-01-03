@@ -127,10 +127,66 @@
             </t>
         </section>
 
-        <section title="UI keywords">
+        <section title="Overridable">
             <t>
-                UI keywords in a schema impose requirements for successfully rendering an instance.
+                The following properties are found within JSON Schema.
             </t>
+            <t>
+                title. description placeholder readonly
+            </t>
+        </section>
+
+        <section title="JSON UI Schema keywords">
+            <t>
+                UI keywords in a schema impose requirements for successfully
+                rendering an editable instance of the model defined by JSON Schema.
+            </t>
+
+            <section title="ui">
+                <t>
+                    This keyword's value MUST be an object. Each member value of this object
+                    MUST be a valid JSON UI Schema.
+                </t>
+                <t>
+                    This keyword plays no role in validation per se. Its role is to provide
+                    a standardized location for schema authors to inline JSON UI Schemas into a
+                    JSON Schema.
+                </t>
+                <t>
+                    As an example, here is a JSON Schema with a JSON UI Schema subschema in "ui":
+                    <figure>
+                        <artwork>
+                        <![CDATA[
+                        {
+                          "scopes": {
+                            "model": {
+                              "type": "object",
+                              "items": {
+                                "name": {...},
+                                "age": {...}
+                              }
+                            },
+                            "scope": {...}
+                          }
+                          "ui": {
+                            "view": "default",
+                            "items": [
+                              "name",
+                              {
+                                "key": "age",
+                                "widget": "number"
+                              }
+                            ],
+                            "actions": [...],
+                            "policies": [...],
+                            "actions": [...]
+                          }
+                        }
+                        ]]>
+                        </artwork>
+                    </figure>
+                </t>
+            </section>
 
             <section title="ui">
             </section>
@@ -140,12 +196,17 @@
 
             <section title="items">
                 <t>
-                    Items MUST be either a string key (which may be an auto generation key) or a valid JSON ui schema.
+                    Unlike in JSON Validation Schema, "items" MUST be an array and
+                    MUST contain at least one string or nothing shall be rendered.
+                </t>
+                <t>
+                    Each key may be an Auto Generation key as defined below, a
+                    ??JSON-Schema-Key?? or a valid JSON UI Schema.
                 </t>
                 <section title="Auto generation keys">
                     <t>
                         The following values are able to automatically generate all or part
-                        of a form from a JSON schema without a complimentary UI schema.
+                        of a form from a JSON Schema without a complimentary UI schema.
                     </t>
                     <section title="'*'">
                         <t>
@@ -159,16 +220,121 @@
                         </t>
                     </section>
                     <section title="Limitations">
-                      <t>
-                        Validation keywords cannot be rendered without without additional information.
-                        oneOf
-                        anyOf
-                      </t>
+                        <t>
+                            Validation keywords cannot be rendered without additional information.
+                            oneOf
+                            anyOf
+                        </t>
+                        <t>
+                            TODO  add more information and options regarding rendering choices.
+                                  I should also describe how to be valid for "*", "..." and a
+                                  standard key entering into one of the keyword definitions.
+                        </t>
                     </section>
                 </section>
             </section>
 
+            <section title="type">
+                <t>
+                    The JSON Schema type can be overriden by the JSON UI Schema.
+                </t>
+                <t>
+                    Where multiple type can be accepted by the JSON Schema
+                    only ONE string value is allowed for type within JSON UI Schema.
+                </t>
+                <t>
+                    The JSON Schema type can be overriden by the JSON UI Schema so
+                    that where multiple type are valid, a single type can avoid
+                    confusing the UI. The exceptions are when one type is valid
+                    in the JSON Schema or two types are valid and one of them is null.
+                </t>
+            </section>
+
+            <section title="hint">
+                <t>
+                    The hint keyword allows for the definition of a value to display
+                    within a field widget to inform the user of what to do.
+                </t>
+                <t>
+                    It differs from "description" as it is directly targeted information
+                    for the form user and not details about the data definition.
+                </t>
+            </section>
+
             <section title="widget">
+                <t>
+                    The widget is either a string provided to inform the UI generator
+                    of what is expected or an object with the name and additional criteria.
+                </t>
+                <t>
+                    A generator SHOULD attempt to implement at least the core set
+                    as defined in this document.
+                </t>
+                <texttable anchor='default-widget-coercion'>
+                    <preamble>Default widget types avoid common coercion definitions</preamble>
+                    <ttcol align='center'>Type</ttcol>
+                    <ttcol align='center'>Widget</ttcol>
+                    <c>string</c><c>text</c>
+                    <c>array</c><c>array</c>
+                    <c>number</c><c>number</c>
+                    <c>integer</c><c>number</c>
+                    <c>boolean</c><c>checkbox</c>
+                    <c>object</c><c>fieldset</c>
+                    <c>string with an enum</c><c>select</c>
+                    <c>array with an enum</c><c>checkboxes</c>
+                    <postamble>which is a very simple example.</postamble>
+                </texttable>
+
+                <section title="array">
+                    <t>
+                        A generator SHOULD attempt to implement at least the core set
+                        as defined in this document.
+                    </t>
+                    <texttable anchor='array'>
+                        <ttcol align='center'>Configuration</ttcol>
+                        <ttcol align='center'>Accepted Value(s)</ttcol>
+                        <c>startEmpty</c><c>TRUE or FALSE</c>
+                        <c>add</c><c>STRING or NULL</c>
+                        <c>remove</c><c>STRING or NULL</c>
+                    </texttable>
+                </section>
+
+                <section title="checkbox">
+                </section>
+
+                <section title="checkboxes">
+                </section>
+
+                <section title="fieldset">
+                </section>
+
+                <section title="radio">
+                </section>
+
+                <section title="radiobuttons">
+                </section>
+
+                <section title="number">
+                </section>
+
+                <section title="section">
+                </section>
+
+                <section title="select">
+                </section>
+
+                <section title="text">
+                </section>
+
+                <section title="textarea">
+                </section>
+
+                <section title="tabarray">
+                </section>
+
+                <section title="tabs">
+                </section>
+
             </section>
 
             <section title="required">
@@ -204,7 +370,7 @@
         "widget": "text"
       },
       {
-        "key": "schema reference to constant",
+        "key": "schema reference to string constant",
         "widget": "inactive"
       },
       {
@@ -224,7 +390,8 @@
   }
   "definitions": {
     "inactive": {
-      "widget": "annotation"
+      "widget": "annotation",
+      "style": "detail"
     }
   }
 }
