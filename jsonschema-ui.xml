@@ -110,36 +110,9 @@
 
         <section title="Interoperability considerations">
 
-            <section title="Regular expressions">
+            <section title="Language / Framework Independence">
                 <t>
-                    Two validation keywords, "pattern" and "patternProperties", use regular
-                    expressions to express constraints. These regular expressions SHOULD
-                    be valid according to the <xref target="ecma262">ECMA 262</xref> regular
-                    expression dialect.
-                </t>
-                <t>
-                    Furthermore, given the high disparity in regular expression constructs support,
-                    schema authors SHOULD limit themselves to the following regular expression
-                    tokens:
-
-                    <list>
-                        <t>individual Unicode characters, as defined by the <xref
-                        target="RFC7159">JSON specification</xref>;</t>
-                        <t>simple character classes ([abc]), range character classes ([a-z]);</t>
-                        <t>complemented character classes ([^abc], [^a-z]);</t>
-                        <t>simple quantifiers: "+" (one or more), "*" (zero or more), "?" (zero or
-                        one), and their lazy versions ("+?", "*?", "??");</t>
-                        <t>range quantifiers: "{x}" (exactly x occurrences), "{x,y}" (at least x, at
-                        most y, occurrences), {x,} (x occurrences or more), and their lazy
-                        versions;</t>
-                        <t>the beginning-of-input ("^") and end-of-input ("$") anchors;</t>
-                        <t>simple grouping ("(...)") and alternation ("|").</t>
-                    </list>
-                </t>
-                <t>
-                    Finally, implementations MUST NOT take regular expressions to be
-                    anchored, neither at the beginning nor at the end. This means, for instance,
-                    the pattern "es" matches "expression".
+                    String substitution MUST be handled in a manner supportable by ANY web framework as a minimum.
                 </t>
             </section>
 
@@ -161,21 +134,47 @@
 
             <section title="ui">
             </section>
+
             <section title="policies">
             </section>
-            <section title="items">
-                <section title="Generation from schema">
-                    <section title="'*'">
 
+            <section title="items">
+                <t>
+                    Items MUST be either a string key (which may be an auto generation key) or a valid JSON ui schema.
+                </t>
+                <section title="Auto generation keys">
+                    <t>
+                        The following values are able to automatically generate all or part
+                        of a form from a JSON schema without a complimentary UI schema.
+                    </t>
+                    <section title="'*'">
+                        <t>
+                            Generate the entire form from the schema alone.
+                        </t>
                     </section>
                     <section title="'...'">
-
+                        <t>
+                            Generate form fields from the schema that are not already
+                            included in the UI schema at the position of the elipses.
+                        </t>
+                    </section>
+                    <section title="Limitations">
+                      <t>
+                        Validation keywords cannot be rendered without without additional information.
+                        oneOf
+                        anyOf
+                      </t>
                     </section>
                 </section>
             </section>
+
             <section title="widget">
             </section>
+
             <section title="required">
+            </section>
+
+            <section title="substitute">
             </section>
 
             <section title="definitions">
