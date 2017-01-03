@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC1034 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2373 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2373.xml">
+<!ENTITY RFC2673 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2673.xml">
+<!ENTITY RFC3339 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3339.xml">
+<!ENTITY RFC3986 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3986.xml">
+<!ENTITY RFC5322 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5322.xml">
+<!ENTITY RFC6570 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6570.xml">
+<!ENTITY RFC6901 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6901.xml">
+<!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml">
+]>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<?rfc strict="no"?>
+<?rfc rfcedstyle="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes" ?>
+<rfc category="info" docName="draft-bennett-json-ui-schema-00" ipr="trust200902">
+    <front>
+        <title abbrev="JSON Schema Validation">JSON UI Schema: A Vocabulary for Structural UI Generation of JSON</title>
+
+        <author fullname="Marcel Bennett" initials="MJ" surname="Bennett">
+            <address>
+                <email>mbennett@iamserious.com</email>
+            </address>
+        </author>
+
+        <date year="2017"/>
+        <workgroup>Internet Engineering Task Force</workgroup>
+        <keyword>JSON</keyword>
+        <keyword>Schema</keyword>
+        <keyword>Form</keyword>
+        <keyword>UI</keyword>
+        <keyword>GUI</keyword>
+        <keyword>User Interface</keyword>
+
+        <abstract>
+            <t>
+                JSON Schema (application/schema+json) has several purposes, one of which is JSON instance UI generation.
+                This document specifies a vocabulary for JSON Schema to describe the meaning of JSON documents,
+                provide hints for user interfaces working with JSON data,
+                and to make assertions about what a valid document must look like.
+            </t>
+        </abstract>
+
+        <note title="Note to Readers">
+            <t>
+                The issues list for this draft can be found at <eref target="https://github.com/json-schema-org/json-schema-spec/issues"/>.
+            </t>
+            <t>
+                For additional information, see <eref target="http://json-schema.org/"/>.
+            </t>
+            <t>
+                To provide feedback, use this issue tracker, the communication methods listed on the homepage, or email the document editors.
+            </t>
+        </note>
+    </front>
+
+    <middle>
+        <section title="Introduction">
+            <t>
+                JSON Schema can be used to require that a given JSON document (an instance)
+                satisfies a certain number of criteria. These criteria are asserted by using
+                keywords described in this specification. In addition, a set of keywords
+                is also defined to assist in interactive, user interface instance generation.
+            </t>
+            <t>
+                This specification will use the terminology defined by the
+                <xref target="json-schema">JSON Schema core</xref> specification.
+            </t>
+        </section>
+
+        <section title="Conventions and Terminology">
+            <t>
+                <!-- The text in this section has been copied from the official boilerplate,
+                and should not be modified.-->
+
+                The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+                "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+                interpreted as described in <xref target="RFC2119">RFC 2119</xref>.
+            </t>
+            <t>
+                This specification uses the term "container instance" to refer to both array and
+                object instances. It uses the term "children instances" to refer to array elements
+                or object member values.
+            </t>
+            <t>
+                This specification uses the term "property set" to refer to the set of an object's
+                member names; for instance, the property set of JSON Object { "a": 1, "b": 2 } is
+                [ "a", "b" ].
+            </t>
+            <t>
+                Elements in an array value are said to be unique if no two elements of this array
+                are <xref target="json-schema">equal</xref>.
+            </t>
+        </section>
+
+        <section title="Overview">
+            <t>
+                The UI Schema is to allow all the work creating a JSON Schema to pay off with a working user interface.
+            </t>
+            <t>
+                While.
+            </t>
+        </section>
+
+        <section title="Interoperability considerations">
+
+            <section title="Regular expressions">
+                <t>
+                    Two validation keywords, "pattern" and "patternProperties", use regular
+                    expressions to express constraints. These regular expressions SHOULD
+                    be valid according to the <xref target="ecma262">ECMA 262</xref> regular
+                    expression dialect.
+                </t>
+                <t>
+                    Furthermore, given the high disparity in regular expression constructs support,
+                    schema authors SHOULD limit themselves to the following regular expression
+                    tokens:
+
+                    <list>
+                        <t>individual Unicode characters, as defined by the <xref
+                        target="RFC7159">JSON specification</xref>;</t>
+                        <t>simple character classes ([abc]), range character classes ([a-z]);</t>
+                        <t>complemented character classes ([^abc], [^a-z]);</t>
+                        <t>simple quantifiers: "+" (one or more), "*" (zero or more), "?" (zero or
+                        one), and their lazy versions ("+?", "*?", "??");</t>
+                        <t>range quantifiers: "{x}" (exactly x occurrences), "{x,y}" (at least x, at
+                        most y, occurrences), {x,} (x occurrences or more), and their lazy
+                        versions;</t>
+                        <t>the beginning-of-input ("^") and end-of-input ("$") anchors;</t>
+                        <t>simple grouping ("(...)") and alternation ("|").</t>
+                    </list>
+                </t>
+                <t>
+                    Finally, implementations MUST NOT take regular expressions to be
+                    anchored, neither at the beginning nor at the end. This means, for instance,
+                    the pattern "es" matches "expression".
+                </t>
+            </section>
+
+        </section>
+
+        <section title="Meta-schema">
+            <t>
+                The current URI for the JSON UI Schema is &lt;http://json-schema.org/draft-07/ui-schema#&gt;.
+            </t>
+            <t>
+                <cref>A revision describing newly added keywords will be added in the future.</cref>
+            </t>
+        </section>
+
+        <section title="UI keywords">
+            <t>
+                UI keywords in a schema impose requirements for successfully rendering an instance.
+            </t>
+
+            <section title="ui">
+            </section>
+            <section title="policies">
+            </section>
+            <section title="items">
+                <section title="Generation from schema">
+                    <section title="'*'">
+
+                    </section>
+                    <section title="'...'">
+
+                    </section>
+                </section>
+            </section>
+            <section title="widget">
+            </section>
+            <section title="required">
+            </section>
+
+            <section title="definitions">
+                <t>
+                    This keyword's value MUST be an object. Each member value of this object
+                    MUST be a valid JSON Schema.
+                </t>
+                <t>
+                    This keyword plays no role in validation per se. Its role is to provide
+                    a standardized location for schema authors to inline JSON Schemas into a
+                    more general schema.
+                </t>
+                <t>
+                    As an example, here is a schema describing a field with a constant value.
+                    The widget selection is a subschema in
+                    "definitions":
+
+                    <figure>
+                        <artwork>
+<![CDATA[
+{
+  "ui": {
+    "items": [
+      "schema reference",
+      {
+        "key": "schema reference",
+        "widget": "text"
+      },
+      {
+        "key": "schema reference to constant",
+        "widget": "inactive"
+      },
+      {
+        "widget": "section",
+        "items": [
+          "schema reference",
+          {
+            "key": "schema reference",
+            "widget": "select"
+          }
+        ]
+      }
+    ],
+    "policies": [
+      ...
+    ]
+  }
+  "definitions": {
+    "inactive": {
+      "widget": "annotation"
+    }
+  }
+}
+]]>
+                        </artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+
+        <section title="Metadata keywords">
+
+            <section title='"title" and "description"'>
+                <t>
+                    The value of both of these keywords MUST be a string.
+                </t>
+                <t>
+                    Both of these keywords can be used to decorate a user interface with
+                    information about the data produced by this user interface. A title will
+                    preferably be short, whereas a description will provide explanation about
+                    the purpose of the instance described by this schema.
+                </t>
+            </section>
+
+            <section title='"default"'>
+                <t>
+                    There are no restrictions placed on the value of this keyword.
+                </t>
+                <t>
+                    This keyword can be used to supply a default JSON value associated with a
+                    particular schema. It is RECOMMENDED that a default value be valid against
+                    the associated schema.
+                </t>
+            </section>
+
+            <section title='"examples"'>
+                <t>
+                    The value of this keyword MUST be an array.
+                    There are no restrictions placed on the values within the array.
+                </t>
+                <t>
+                    This keyword can be used to provide sample JSON values associated with a
+                    particular schema, for the purpose of illustrating usage.  It is
+                    RECOMMENDED that these values be valid against the associated schema.
+                </t>
+                <t>
+                    Implementations MAY use the value of "default", if present, as
+                    an additional example.  If "examples" is absent, "default"
+                    MAY still be used in this manner.
+                </t>
+            </section>
+
+        </section>
+
+        <section title="Security considerations">
+            <t>
+                JSON Schema validation defines a vocabulary for JSON Schema core and concerns all the security considerations listed there.
+            </t>
+            <t>
+                JSON Schema validation allows the use of Regular Expressions, which have numerous different (often incompatible) implementations.
+                Some implementations allow the embedding of arbitrary code, which is outside the scope of JSON Schema and MUST NOT be permitted.
+                Regular expressions can often also be crafted to be extremely expensive to compute (with so-called "catastrophic backtracking"),
+                resulting in a denial-of-service attack.
+            </t>
+        </section>
+
+        <!--
+        <section title="IANA Considerations">
+            <t>
+                This specification does not have any influence with regards to IANA.
+            </t>
+        </section>
+        -->
+    </middle>
+
+    <back>
+        <!-- References Section -->
+        <references title="Normative References">
+            &RFC2119;
+            <reference anchor="json-schema">
+                <front>
+                    <title>JSON Schema: A Media Type for Describing JSON Documents</title>
+                    <author/>
+                    <date year="2016" month="October"/>
+                </front>
+                <seriesInfo name="Internet-Draft" value="draft-wright-json-schema-00" />
+            </reference>
+        </references>
+
+        <references title="Informative References">
+            &RFC1034;
+            &RFC2373;
+            &RFC2673;
+            &RFC3339;
+            &RFC3986;
+            &RFC6570;
+            &RFC6901;
+            &RFC7159;
+            &RFC5322;
+            <reference anchor="ecma262"
+            target="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf">
+                <front>
+                    <title>ECMA 262 specification</title>
+                    <author/>
+                    <date/>
+                </front>
+            </reference>
+        </references>
+
+        <section title="Acknowledgments">
+            <t>
+                Thanks to
+                Gary Court,
+                Francis Galiegue,
+                Kris Zyp,
+                Geraint Luff,
+                Austin Wright,
+                Ben Hutton,
+                and Henry H. Andrews
+                for their work on the drafts of JSON Schema.
+            </t>
+        </section>
+
+        <section title="ChangeLog">
+            <t>
+                <cref>This section to be removed before leaving Internet-Draft status.</cref>
+            </t>
+            <t>
+                <list style="hanging">
+                    <t hangText="draft-bennett-json-ui-schema-00">
+                        <list style="symbols">
+                            <t>Initial draft.</t>
+                            <t>Define the "ui" keyword.</t>
+                            <t>Add interoperability considerations.</t>
+                        </list>
+                    </t>
+                </list>
+            </t>
+        </section>
+    </back>
+</rfc>
